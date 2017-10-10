@@ -20,7 +20,7 @@ def open_and_read_file(file_path):
     return long_text
 
 
-def make_chains(text_string):
+def make_chains(text_string, n):
     """Take input text as string; return dictionary of Markov chains.
 
     A chain will be a key that consists of a tuple of (word1, word2)
@@ -49,19 +49,19 @@ def make_chains(text_string):
 
     text_list = text_string.split()
     text_list.append(None)
-    for i in range(len(text_list) - 2):
-        word0 = text_list[i]
-        word1 = text_list[i + 1]
-        follower = text_list[i + 2]
-        chains[(word0, word1)] = chains.get((word0, word1), [])
-        chains[(word0, word1)].append(follower)
+    for i in range(len(text_list) - n):
+        text_snippet = (text_list[i:i + n])
+        follower = text_list[i + n]
+        chains[(text_snippet)] = chains.get((text_snippet), [])
+        chains[(text_snippet)].append(follower)
     return chains
 
 
-def make_text(chains):
+def make_text(chains, n):
     """Return text from chains."""
     new_word = ""
     words = []
+    i = 0
 
     bi_gram_tuple = choice(chains.keys())
     # bi_gram_list = list(bi_gram_tuple)
@@ -69,25 +69,26 @@ def make_text(chains):
     words.extend(bi_gram_tuple)
     # start loop
     while True:
+        i += 1
         new_word = choice(chains[bi_gram_tuple])
         if new_word is None:
             break
         words.append(new_word)
-        bi_gram_tuple = (words[-2], words[-1])
+        bi_gram_tuple = (words[i:i + n])
         # import pdb; pdb.set_trace()
 
     return " ".join(words)
 
 
 input_path = sys.argv[1]
-
+n = int(sys.argv[2])
 # Open the file and turn it into one long string
 input_text = open_and_read_file(input_path)
 
 # Get a Markov chain
-chains = make_chains(input_text)
+chains = make_chains(input_text, n)
 
 # Produce random text
-random_text = make_text(chains)
+random_text = make_text(chains, n)
 
 print random_text
