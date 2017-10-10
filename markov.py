@@ -49,11 +49,13 @@ def make_chains(text_string, n):
 
     text_list = text_string.split()
     text_list.append(None)
+
     for i in range(len(text_list) - n):
-        text_snippet = (text_list[i:i + n])
+        text_snippet = tuple(text_list[i:i + n])
         follower = text_list[i + n]
-        chains[(text_snippet)] = chains.get((text_snippet), [])
-        chains[(text_snippet)].append(follower)
+        chains[text_snippet] = chains.get(text_snippet, [])
+        chains[text_snippet].append(follower)
+
     return chains
 
 
@@ -64,24 +66,23 @@ def make_text(chains, n):
     i = 0
 
     bi_gram_tuple = choice(chains.keys())
-    # bi_gram_list = list(bi_gram_tuple)
 
     words.extend(bi_gram_tuple)
-    # start loop
+
     while True:
         i += 1
         new_word = choice(chains[bi_gram_tuple])
         if new_word is None:
             break
         words.append(new_word)
-        bi_gram_tuple = (words[i:i + n])
-        # import pdb; pdb.set_trace()
+        bi_gram_tuple = tuple(words[i:i + n])
 
     return " ".join(words)
 
 
 input_path = sys.argv[1]
-n = int(sys.argv[2])
+# n = int(sys.argv[2])
+n = 2
 # Open the file and turn it into one long string
 input_text = open_and_read_file(input_path)
 
