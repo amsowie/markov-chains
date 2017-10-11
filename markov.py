@@ -12,10 +12,14 @@ def open_and_read_file(file_path):
 
     # your code goes here
     filename = open(file_path)
-
-    long_text = filename.read()
-
+    file_lines = filename.readlines()
     filename.close()
+    # import pdb; pdb.set_trace()
+
+    start_line = file_lines.index(choice(file_lines[:-300]))
+    end_line = start_line + 300
+    selected_lines = file_lines[start_line:end_line]
+    long_text = " ".join(selected_lines)
 
     return long_text
 
@@ -82,8 +86,9 @@ def make_text(chains, n):
     return " ".join(words)
 
 
-input_path = sys.argv[1]
-n = int(sys.argv[2])
+input_path = "alice.txt" # sys.argv[1]
+n = 2
+# n = int(sys.argv[2])
 
 # Open the file and turn it into one long string
 input_text = open_and_read_file(input_path)
