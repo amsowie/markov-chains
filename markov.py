@@ -72,17 +72,19 @@ def make_text(chains, n):
     while True:
         i += 1
         new_word = choice(chains[bi_gram_tuple])
+        total_chars = sum(len(char) for char in words) + len(words)
         if new_word is None:
             break
         words.append(new_word)
         bi_gram_tuple = tuple(words[i:i + n])
 
+    words[0] = words[0].title()
     return " ".join(words)
 
 
 input_path = sys.argv[1]
-# n = int(sys.argv[2])
-n = 2
+n = int(sys.argv[2])
+
 # Open the file and turn it into one long string
 input_text = open_and_read_file(input_path)
 
